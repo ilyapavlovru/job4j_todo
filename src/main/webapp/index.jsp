@@ -27,12 +27,18 @@
     $(document).ready(function () {
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/todo/items',
+            url: 'http://localhost:8080/todo/item',
             dataType: 'json'
         }).done(function (data) {
             for (let x = 0; x < data.length; x++) {
-                let a = "place" + data[x].row + data[x].cell;
-                document.getElementById(a).disabled = true;
+
+                console.log(data)
+
+                // for (let x = 0; x < data.length; x++) {
+                //     console.log('id =' + data[x].id);
+                //     console.log('row = ' + data[x].row);
+                //     console.log('cell = ' + data[x].cell);
+                // }
             }
         }).fail(function (err) {
             alert(err);
