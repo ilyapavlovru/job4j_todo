@@ -29,7 +29,7 @@
     $(document).ready(function () {
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/todo/item',
+            url: 'http://localhost:8080/todo/items.do',
             dataType: 'json'
         }).done(function (data) {
 
@@ -60,15 +60,19 @@
         });
     });
 
-
     function validate() {
+        const description = $('#description').val();
+        if (description === "") {
+            alert("Укажите описание задания");
+            return false;
+        }
     }
 </script>
 
 <div class="container">
     <h2>Добавить новое задание</h2>
 
-    <form action="/action_page.php">
+    <form action="<%=request.getContextPath()%>/items.do" method="post">
 
         <div class="form-group">
             <label for="description">Описание:</label>

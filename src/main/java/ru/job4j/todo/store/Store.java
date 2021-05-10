@@ -6,4 +6,5 @@ import java.util.Collection;
 
 public interface Store {
     Collection<Item> findAllItems();
+    Item addItem(Item item);
 }
