@@ -18,6 +18,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
     <title>TODO список</title>
 </head>
 <body>
@@ -30,15 +32,28 @@
             url: 'http://localhost:8080/todo/item',
             dataType: 'json'
         }).done(function (data) {
+
+            console.log(data)
+
             for (let x = 0; x < data.length; x++) {
 
-                console.log(data)
+                console.log('id =' + data[x].id);
+                console.log('description = ' + data[x].description);
+                console.log('created = ' + data[x].created);
+                console.log('done = ' + data[x].done);
 
-                // for (let x = 0; x < data.length; x++) {
-                //     console.log('id =' + data[x].id);
-                //     console.log('row = ' + data[x].row);
-                //     console.log('cell = ' + data[x].cell);
-                // }
+                $('#table tr:last').after(
+                    '<tr>' +
+
+                    '<td>' + data[x].description +'</td>' +
+
+                    '<td><div class="custom-control custom-checkbox">' +
+                    '<input type="checkbox" class="custom-control-input" id="customCheck' + data[x].id + '"' + data[x].done + '>' +
+                    '<label class="custom-control-label" for="customCheck' + data[x].id + '"></label></div>' +
+                    '</td>' +
+
+                    '</tr>');
+
             }
         }).fail(function (err) {
             alert(err);
@@ -74,7 +89,7 @@
 
     <div class="row">
         <div class="col-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered" id='table'>
                 <thead>
                 <tr>
                     <th scope="col">Описание</th>
@@ -83,36 +98,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Bootstrap 4 CDN and Starter Template</td>
-                    <td>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
-                            <label class="custom-control-label" for="customCheck1"></label>
-                        </div>
-                    </td>
 
-                </tr>
-                <tr>
-                    <td>Bootstrap Grid 4 Tutorial and Examples</td>
-                    <td>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck2">
-                            <label class="custom-control-label" for="customCheck2"></label>
-                        </div>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td>Bootstrap Flexbox Tutorial and Examples</td>
-                    <td>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck3">
-                            <label class="custom-control-label" for="customCheck3"></label>
-                        </div>
-                    </td>
-
-                </tr>
                 </tbody>
             </table>
         </div>
