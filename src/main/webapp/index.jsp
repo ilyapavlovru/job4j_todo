@@ -66,7 +66,8 @@
 
                 '<td>' + allLoadedItems[x].description + '</td>' +
                 '<td><div class="custom-control custom-checkbox">' +
-                '<input type="checkbox"' + checkBoxValue + ' class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' + allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
+                '<input type="checkbox"' + checkBoxValue + ' class="custom-control-input" id="customCheck' +
+                allLoadedItems[x].id + '"' + allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
                 '<label class="custom-control-label" for="customCheck' + allLoadedItems[x].id + '"></label></div>' +
                 '</td>' +
 
@@ -84,7 +85,8 @@
 
                     '<td>' + allLoadedItems[x].description + '</td>' +
                     '<td><div class="custom-control custom-checkbox">' +
-                    '<input type="checkbox" class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' + allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
+                    '<input type="checkbox" class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' +
+                    allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
                     '<label class="custom-control-label" for="customCheck' + allLoadedItems[x].id + '"></label></div>' +
                     '</td>' +
 
@@ -118,36 +120,16 @@
     }
 
     function checkBoxSelected(me) {
-
-        me.id.substring(11);
-
         const itemId = me.id.substring(11);
-        console.log('Update item, id = ' + itemId);
-
         $.ajax({
             url: 'http://localhost:8080/todo/items.do',
             type: 'POST',
             data: {itemId: itemId},
         }).done(function (data) {
-
             loadItemsFromDB();
-
         }).fail(function (err) {
             alert(err);
         });
-
-
-        // $.ajax({
-        //     type: 'GET',
-        //     url: 'http://localhost:8080/todo/items.do?item_id=' + itemId,
-        //     dataType: 'json'
-        // }).done(function (data) {
-        //
-        //
-        // }).fail(function (err) {
-        //     alert(err);
-        // });
-
     }
 </script>
 

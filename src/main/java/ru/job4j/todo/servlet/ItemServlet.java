@@ -39,7 +39,11 @@ public class ItemServlet extends HttpServlet {
             int itemId = Integer.parseInt(req.getParameter("itemId"));
             Store store = new HbmTodoStore();
             Item item = store.findById(itemId);
-            item.setDone(true);
+            if (!item.isDone()) {
+                item.setDone(true);
+            } else {
+                item.setDone(false);
+            }
             store.replace(item);
         }
     }
