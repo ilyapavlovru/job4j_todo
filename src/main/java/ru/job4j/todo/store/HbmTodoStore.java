@@ -37,6 +37,26 @@ public class HbmTodoStore implements Store, AutoCloseable {
     }
 
     @Override
+    public Item findById(int id) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            Item result = session.get(Item.class, id);
+            session.getTransaction().commit();
+            return result;
+        }
+    }
+
+    @Override
+    public boolean replace(Item item) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            session.update(item);
+            session.getTransaction().commit();
+            return true;
+        }
+    }
+
+    @Override
     public void close() throws Exception {
         StandardServiceRegistryBuilder.destroy(registry);
     }

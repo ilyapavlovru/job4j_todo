@@ -29,6 +29,11 @@
     var allLoadedItems;
 
     $(document).ready(function () {
+        loadItemsFromDB();
+    });
+
+    function loadItemsFromDB() {
+        console.log('loadItemsFromDB')
         $.ajax({
             type: 'GET',
             url: 'http://localhost:8080/todo/items.do',
@@ -38,21 +43,12 @@
             allLoadedItems = data;
             console.log(data);
 
-            if (isShowAllTasksCheckBoxChecked()) {
-                console.log('isShowAllTasksCheckBoxChecked');
-                console.log(allLoadedItems);
-                // addAllItemsToTable();
-            } else {
-                // addNotDoneItemsToTable();
-            }
-
-
-
+            fillItemsTable();
 
         }).fail(function (err) {
             alert(err);
         });
-    });
+    }
 
     function validate() {
         const description = $('#description').val();
@@ -63,22 +59,18 @@
     }
 
     function addAllItemsToTable() {
-
         for (let x = 0; x < allLoadedItems.length; x++) {
-
-            // если стоит галочка показывать все элементы
-            var checkBoxValue = allLoadedItems[x].done ? 'checked="checked"' : '';
+            var checkBoxValue = allLoadedItems[x].done ? ' checked="checked"' : '';
             $('#table tr:last').after(
                 '<tr>' +
 
                 '<td>' + allLoadedItems[x].description + '</td>' +
                 '<td><div class="custom-control custom-checkbox">' +
-                '<input type="checkbox"' + checkBoxValue + ' class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' + allLoadedItems[x].done + '>' +
+                '<input type="checkbox"' + checkBoxValue + ' class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' + allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
                 '<label class="custom-control-label" for="customCheck' + allLoadedItems[x].id + '"></label></div>' +
                 '</td>' +
 
                 '</tr>');
-
         }
     }
 
@@ -92,35 +84,31 @@
 
                     '<td>' + allLoadedItems[x].description + '</td>' +
                     '<td><div class="custom-control custom-checkbox">' +
-                    '<input type="checkbox" class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' + allLoadedItems[x].done + '>' +
+                    '<input type="checkbox" class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' + allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
                     '<label class="custom-control-label" for="customCheck' + allLoadedItems[x].id + '"></label></div>' +
                     '</td>' +
 
                     '</tr>');
             }
-
         }
     }
 
     function isShowAllTasksCheckBoxChecked() {
+        return !!document.getElementById('showAllTasks').checked;
+    }
 
+    function fillItemsTable() {
 
         clearTable();
 
-
-        if (document.getElementById('showAllTasks').checked) {
-            console.log('checked');
+        if (isShowAllTasksCheckBoxChecked()) {
             addAllItemsToTable();
-            return true;
         } else {
-            console.log('unchecked')
             addNotDoneItemsToTable();
-            return false;
         }
     }
 
     function clearTable() {
-
         var tableHeaderRowCount = 1;
         var table = document.getElementById('table');
         var rowCount = table.rows.length;
@@ -129,6 +117,38 @@
         }
     }
 
+    function checkBoxSelected(me) {
+
+        me.id.substring(11);
+
+        const itemId = me.id.substring(11);
+        console.log('Update item, id = ' + itemId);
+
+        $.ajax({
+            url: 'http://localhost:8080/todo/items.do',
+            type: 'POST',
+            data: {itemId: itemId},
+        }).done(function (data) {
+
+            loadItemsFromDB();
+
+        }).fail(function (err) {
+            alert(err);
+        });
+
+
+        // $.ajax({
+        //     type: 'GET',
+        //     url: 'http://localhost:8080/todo/items.do?item_id=' + itemId,
+        //     dataType: 'json'
+        // }).done(function (data) {
+        //
+        //
+        // }).fail(function (err) {
+        //     alert(err);
+        // });
+
+    }
 </script>
 
 <div class="container">
@@ -140,6 +160,7 @@
             <label for="description">Описание:</label>
             <input type="text" class="form-control" id="description" placeholder="Введите описание" name="description">
         </div>
+        <input type="hidden" name="action" value="add"/>
         <button type="submit" class="btn btn-success" onclick="return validate()">Добавить</button>
     </form>
 
@@ -149,7 +170,7 @@
 <div class="container">
 
     <div class="form-check">
-        <input type="checkbox" checked="checked" class="form-check-input" id="showAllTasks" onclick="isShowAllTasksCheckBoxChecked();">
+        <input type="checkbox" checked="checked" class="form-check-input" id="showAllTasks" onclick="fillItemsTable();">
         <label class="form-check-label" for="showAllTasks">Показать все задания</label>
     </div>
 

@@ -27,12 +27,20 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        String description = req.getParameter("description");
-        Store store = new HbmTodoStore();
-        Item item = new Item(description, new Timestamp(System.currentTimeMillis()), false);
-        store.addItem(item);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("index.jsp");
-        requestDispatcher.forward(req, resp);
+        if ("add".equals(req.getParameter("action"))) {
+            req.setCharacterEncoding("UTF-8");
+            String description = req.getParameter("description");
+            Store store = new HbmTodoStore();
+            Item item = new Item(description, new Timestamp(System.currentTimeMillis()), false);
+            store.addItem(item);
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("index.jsp");
+            requestDispatcher.forward(req, resp);
+        } else {
+            int itemId = Integer.parseInt(req.getParameter("itemId"));
+            Store store = new HbmTodoStore();
+            Item item = store.findById(itemId);
+            item.setDone(true);
+            store.replace(item);
+        }
     }
 }
