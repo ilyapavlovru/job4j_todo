@@ -39,10 +39,14 @@
             console.log(data);
 
             if (isShowAllTasksCheckBoxChecked()) {
-                console.log('isShowAllTasksCheckBoxChecked')
+                console.log('isShowAllTasksCheckBoxChecked');
+                console.log(allLoadedItems);
+                // addAllItemsToTable();
+            } else {
+                // addNotDoneItemsToTable();
             }
 
-            addRowsToItemsTable();
+
 
 
         }).fail(function (err) {
@@ -58,14 +62,9 @@
         }
     }
 
-    function addRowsToItemsTable() {
+    function addAllItemsToTable() {
 
         for (let x = 0; x < allLoadedItems.length; x++) {
-
-            console.log('id =' + allLoadedItems[x].id);
-            console.log('description = ' + allLoadedItems[x].description);
-            console.log('created = ' + allLoadedItems[x].created);
-            console.log('done = ' + allLoadedItems[x].done);
 
             // если стоит галочка показывать все элементы
             var checkBoxValue = allLoadedItems[x].done ? 'checked="checked"' : '';
@@ -73,7 +72,6 @@
                 '<tr>' +
 
                 '<td>' + allLoadedItems[x].description + '</td>' +
-
                 '<td><div class="custom-control custom-checkbox">' +
                 '<input type="checkbox"' + checkBoxValue + ' class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' + allLoadedItems[x].done + '>' +
                 '<label class="custom-control-label" for="customCheck' + allLoadedItems[x].id + '"></label></div>' +
@@ -81,19 +79,53 @@
 
                 '</tr>');
 
-            // иначе показываем только элементы невыполненные, т.е. у которых done = false
         }
     }
 
-    // function show
+    function addNotDoneItemsToTable() {
+        for (let x = 0; x < allLoadedItems.length; x++) {
+
+            if (allLoadedItems[x].done === false) {
+
+                $('#table tr:last').after(
+                    '<tr>' +
+
+                    '<td>' + allLoadedItems[x].description + '</td>' +
+                    '<td><div class="custom-control custom-checkbox">' +
+                    '<input type="checkbox" class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' + allLoadedItems[x].done + '>' +
+                    '<label class="custom-control-label" for="customCheck' + allLoadedItems[x].id + '"></label></div>' +
+                    '</td>' +
+
+                    '</tr>');
+            }
+
+        }
+    }
 
     function isShowAllTasksCheckBoxChecked() {
+
+
+        clearTable();
+
+
         if (document.getElementById('showAllTasks').checked) {
             console.log('checked');
+            addAllItemsToTable();
             return true;
         } else {
             console.log('unchecked')
+            addNotDoneItemsToTable();
             return false;
+        }
+    }
+
+    function clearTable() {
+
+        var tableHeaderRowCount = 1;
+        var table = document.getElementById('table');
+        var rowCount = table.rows.length;
+        for (var i = tableHeaderRowCount; i < rowCount; i++) {
+            table.deleteRow(tableHeaderRowCount);
         }
     }
 
