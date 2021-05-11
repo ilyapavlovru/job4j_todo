@@ -5,7 +5,6 @@ import ru.job4j.todo.model.Item;
 import ru.job4j.todo.store.HbmTodoStore;
 import ru.job4j.todo.store.Store;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,17 +26,15 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        Store store = new HbmTodoStore();
         if ("add".equals(req.getParameter("action"))) {
-            req.setCharacterEncoding("UTF-8");
             String description = req.getParameter("description");
-            Store store = new HbmTodoStore();
             Item item = new Item(description, new Timestamp(System.currentTimeMillis()), false);
             store.addItem(item);
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("index.jsp");
-            requestDispatcher.forward(req, resp);
+            resp.sendRedirect(req.getContextPath());
         } else {
             int itemId = Integer.parseInt(req.getParameter("itemId"));
-            Store store = new HbmTodoStore();
             Item item = store.findById(itemId);
             if (!item.isDone()) {
                 item.setDone(true);

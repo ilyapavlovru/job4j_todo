@@ -26,25 +26,20 @@
 
 <script>
 
-    var allLoadedItems;
+    let allLoadedItems;
 
     $(document).ready(function () {
         loadItemsFromDB();
     });
 
     function loadItemsFromDB() {
-        console.log('loadItemsFromDB')
         $.ajax({
             type: 'GET',
             url: 'http://localhost:8080/todo/items.do',
             dataType: 'json'
         }).done(function (data) {
-
             allLoadedItems = data;
-            console.log(data);
-
             fillItemsTable();
-
         }).fail(function (err) {
             alert(err);
         });
@@ -63,33 +58,27 @@
             var checkBoxValue = allLoadedItems[x].done ? ' checked="checked"' : '';
             $('#table tr:last').after(
                 '<tr>' +
-
                 '<td>' + allLoadedItems[x].description + '</td>' +
                 '<td><div class="custom-control custom-checkbox">' +
                 '<input type="checkbox"' + checkBoxValue + ' class="custom-control-input" id="customCheck' +
                 allLoadedItems[x].id + '"' + allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
                 '<label class="custom-control-label" for="customCheck' + allLoadedItems[x].id + '"></label></div>' +
                 '</td>' +
-
                 '</tr>');
         }
     }
 
     function addNotDoneItemsToTable() {
         for (let x = 0; x < allLoadedItems.length; x++) {
-
             if (allLoadedItems[x].done === false) {
-
                 $('#table tr:last').after(
                     '<tr>' +
-
                     '<td>' + allLoadedItems[x].description + '</td>' +
                     '<td><div class="custom-control custom-checkbox">' +
                     '<input type="checkbox" class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' +
                     allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
                     '<label class="custom-control-label" for="customCheck' + allLoadedItems[x].id + '"></label></div>' +
                     '</td>' +
-
                     '</tr>');
             }
         }
@@ -100,9 +89,7 @@
     }
 
     function fillItemsTable() {
-
         clearTable();
-
         if (isShowAllTasksCheckBoxChecked()) {
             addAllItemsToTable();
         } else {
@@ -111,10 +98,10 @@
     }
 
     function clearTable() {
-        var tableHeaderRowCount = 1;
-        var table = document.getElementById('table');
-        var rowCount = table.rows.length;
-        for (var i = tableHeaderRowCount; i < rowCount; i++) {
+        const tableHeaderRowCount = 1;
+        const table = document.getElementById('table');
+        const rowCount = table.rows.length;
+        for (let i = tableHeaderRowCount; i < rowCount; i++) {
             table.deleteRow(tableHeaderRowCount);
         }
     }
@@ -125,7 +112,7 @@
             url: 'http://localhost:8080/todo/items.do',
             type: 'POST',
             data: {itemId: itemId},
-        }).done(function (data) {
+        }).done(function () {
             loadItemsFromDB();
         }).fail(function (err) {
             alert(err);
@@ -135,9 +122,7 @@
 
 <div class="container">
     <h2>Добавить новое задание</h2>
-
     <form action="<%=request.getContextPath()%>/items.do" method="post">
-
         <div class="form-group">
             <label for="description">Описание:</label>
             <input type="text" class="form-control" id="description" placeholder="Введите описание" name="description">
@@ -145,17 +130,14 @@
         <input type="hidden" name="action" value="add"/>
         <button type="submit" class="btn btn-success" onclick="return validate()">Добавить</button>
     </form>
-
 </div>
 
-
 <div class="container">
-
+    <h2>Список заданий</h2>
     <div class="form-check">
-        <input type="checkbox" checked="checked" class="form-check-input" id="showAllTasks" onclick="fillItemsTable();">
+        <input type="checkbox" class="form-check-input" id="showAllTasks" onclick="fillItemsTable();">
         <label class="form-check-label" for="showAllTasks">Показать все задания</label>
     </div>
-
     <div class="row">
         <div class="col-12">
             <table class="table table-bordered" id='table'>
@@ -163,7 +145,6 @@
                 <tr>
                     <th scope="col">Описание</th>
                     <th scope="col">Выполнено</th>
-
                 </tr>
                 </thead>
                 <tbody id="todoListTable">
@@ -172,6 +153,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>
