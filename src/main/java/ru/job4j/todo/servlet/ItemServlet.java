@@ -35,13 +35,13 @@ public class ItemServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath());
         } else {
             int itemId = Integer.parseInt(req.getParameter("itemId"));
-            Item item = store.findById(itemId);
+            Item item = store.findItemById(itemId);
             if (!item.isDone()) {
                 item.setDone(true);
             } else {
                 item.setDone(false);
             }
-            store.replace(item);
+            store.replaceItem(item);
         }
     }
 }
