@@ -8,7 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.job4j.todo.model.Item;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.function.Function;
 
 public class HbmTodoStore implements Store, AutoCloseable {
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -16,44 +16,47 @@ public class HbmTodoStore implements Store, AutoCloseable {
     private final SessionFactory sf = new MetadataSources(registry)
             .buildMetadata().buildSessionFactory();
 
-    @Override
-    public Collection<Item> findAllItems() {
+    private <T> T tx(final Function<Session, T> command) {
         try (Session session = sf.openSession()) {
             session.beginTransaction();
-            List<Item> result = session.createQuery("from ru.job4j.todo.model.Item").list();
+            T rsl = command.apply(session);
             session.getTransaction().commit();
-            return result;
+            return rsl;
         }
+    }
+
+    @Override
+    public Collection<Item> findAllItems() {
+        return tx(
+                session -> session.createQuery("from ru.job4j.todo.model.Item").list()
+        );
     }
 
     @Override
     public Item addItem(Item item) {
-        try (Session session = sf.openSession()) {
-            session.beginTransaction();
-            session.save(item);
-            session.getTransaction().commit();
-            return item;
-        }
+        return tx(
+                session -> {
+                    session.save(item);
+                    return item;
+                }
+        );
     }
 
     @Override
     public Item findById(int id) {
-        try (Session session = sf.openSession()) {
-            session.beginTransaction();
-            Item result = session.get(Item.class, id);
-            session.getTransaction().commit();
-            return result;
-        }
+        return tx(
+                session -> session.get(Item.class, id)
+        );
     }
 
     @Override
     public boolean replace(Item item) {
-        try (Session session = sf.openSession()) {
-            session.beginTransaction();
-            session.update(item);
-            session.getTransaction().commit();
-            return true;
-        }
+        return tx(
+                session -> {
+                    session.update(item);
+                    return true;
+                }
+        );
     }
 
     @Override
