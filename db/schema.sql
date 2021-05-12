@@ -5,6 +5,8 @@ create table item
     created     timestamp,
     done        boolean
 );
+ALTER TABLE item
+    ADD COLUMN user_id int not null references j_user (id);
 
 create table j_role
 (

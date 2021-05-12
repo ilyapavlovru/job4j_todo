@@ -10,17 +10,25 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String description;
+
     private Timestamp created;
+
     private boolean done;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Item() {
     }
 
-    public Item(String description, Timestamp created, boolean done) {
+    public Item(String description, Timestamp created, boolean done, User user) {
         this.description = description;
         this.created = created;
         this.done = done;
+        this.user = user;
     }
 
     public String getDescription() {
@@ -45,6 +53,14 @@ public class Item {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
