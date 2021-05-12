@@ -24,6 +24,16 @@
 </head>
 <body>
 
+<div class="container">
+    <div class="row">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">Войти</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 <script>
 
     let allLoadedItems;
