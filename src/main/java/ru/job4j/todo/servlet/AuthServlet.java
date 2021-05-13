@@ -14,13 +14,10 @@ import java.io.IOException;
 public class AuthServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-
         Store store = new HbmTodoStore();
         User user = store.findUserByEmail(email);
-
         if (user != null && user.getPassword().equals(password)) {
             HttpSession sc = req.getSession();
             User sessionUser = new User(user.getName(), user.getEmail());

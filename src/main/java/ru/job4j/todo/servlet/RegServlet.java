@@ -18,21 +18,15 @@ public class RegServlet extends HttpServlet {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-
         Store store = new HbmTodoStore();
-
         User existingUser = store.findUserByEmail(email);
-
         if (existingUser == null) {
             req.setCharacterEncoding("UTF-8");
-
             Role role = store.findRoleByName("ADMIN");
             if (role == null) {
                 role = store.addRole(Role.of("ADMIN"));
             }
-
             store.addUser(User.of(name, email, password, role));
-
             HttpSession sc = req.getSession();
             User sessionUser = new User(name, email);
             sc.setAttribute("user", sessionUser);

@@ -64,16 +64,6 @@ public class HbmTodoStore implements Store, AutoCloseable {
 
     @Override
     public User findUserByEmail(String email) {
-//
-//        try (Session session = sf.openSession()) {
-//            session.beginTransaction();
-//            Query query = session.createQuery("from ru.job4j.todo.model.User where email = :email");
-//            query.setParameter("email", email);
-//            User result = (User) query.uniqueResult();
-//            session.getTransaction().commit();
-//            return result;
-//        }
-
         return tx(
                 session -> {
                     Query query = session.createQuery("from ru.job4j.todo.model.User where email = :email");

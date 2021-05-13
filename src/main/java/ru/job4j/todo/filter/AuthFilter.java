@@ -9,7 +9,6 @@ public class AuthFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
     }
 
     @Override
@@ -22,7 +21,6 @@ public class AuthFilter implements Filter {
             return;
         }
         if (req.getSession().getAttribute("user") == null) {
-            String s = req.getContextPath();
             resp.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
@@ -31,6 +29,5 @@ public class AuthFilter implements Filter {
 
     @Override
     public void destroy() {
-
     }
 }

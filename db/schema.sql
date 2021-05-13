@@ -2,11 +2,10 @@ create table item
 (
     id          serial primary key,
     description varchar(255),
+    user_name   varchar(50),
     created     timestamp,
     done        boolean
 );
-ALTER TABLE item
-    ADD COLUMN user_id int not null references j_user (id);
 
 create table j_role
 (
