@@ -38,7 +38,7 @@ public class ItemServlet extends HttpServlet {
             User sessionUser = (User) session.getAttribute("user");
             User user = store.findUserByEmail(sessionUser.getEmail());
 
-            Item item = new Item(description, new Timestamp(System.currentTimeMillis()), false, user);
+            Item item = new Item(description, new Timestamp(System.currentTimeMillis()), false, user.getName());
             store.addItem(item);
             resp.sendRedirect(req.getContextPath());
         } else {

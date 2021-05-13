@@ -17,18 +17,17 @@ public class Item {
 
     private boolean done;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_name")
+    private String userName;
 
     public Item() {
     }
 
-    public Item(String description, Timestamp created, boolean done, User user) {
+    public Item(String description, Timestamp created, boolean done, String userName) {
         this.description = description;
         this.created = created;
         this.done = done;
-        this.user = user;
+        this.userName = userName;
     }
 
     public String getDescription() {
@@ -55,12 +54,12 @@ public class Item {
         this.done = done;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override

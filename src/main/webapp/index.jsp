@@ -32,7 +32,10 @@
             </li>
         </ul>
     </div>
+    <hr align="left" size="5">
 </div>
+
+
 
 <script>
 
@@ -50,9 +53,7 @@
         }).done(function (data) {
             allLoadedItems = data;
             fillItemsTable();
-        }).fail(function (err) {
-            alert(err);
-        });
+        })
     }
 
     function validate() {
@@ -69,6 +70,7 @@
             $('#table tr:last').after(
                 '<tr>' +
                 '<td>' + allLoadedItems[x].description + '</td>' +
+                '<td>' + allLoadedItems[x].userName + '</td>' +
                 '<td><div class="custom-control custom-checkbox">' +
                 '<input type="checkbox"' + checkBoxValue + ' class="custom-control-input" id="customCheck' +
                 allLoadedItems[x].id + '"' + allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
@@ -84,6 +86,7 @@
                 $('#table tr:last').after(
                     '<tr>' +
                     '<td>' + allLoadedItems[x].description + '</td>' +
+                    '<td>' + allLoadedItems[x].userName + '</td>' +
                     '<td><div class="custom-control custom-checkbox">' +
                     '<input type="checkbox" class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' +
                     allLoadedItems[x].done + ' onclick="return checkBoxSelected(this)">' +
@@ -154,6 +157,7 @@
                 <thead>
                 <tr>
                     <th scope="col">Описание</th>
+                    <th scope="col">Автор</th>
                     <th scope="col">Выполнено</th>
                 </tr>
                 </thead>
