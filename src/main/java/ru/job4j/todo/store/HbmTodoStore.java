@@ -2,6 +2,7 @@ package ru.job4j.todo.store;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -20,11 +21,17 @@ public class HbmTodoStore implements Store, AutoCloseable {
             .buildMetadata().buildSessionFactory();
 
     private <T> T tx(final Function<Session, T> command) {
-        try (Session session = sf.openSession()) {
-            session.beginTransaction();
+        final Session session = sf.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
             T rsl = command.apply(session);
-            session.getTransaction().commit();
+            tx.commit();
             return rsl;
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
         }
     }
 
