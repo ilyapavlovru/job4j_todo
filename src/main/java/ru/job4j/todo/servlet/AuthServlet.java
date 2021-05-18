@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class AuthServlet extends HttpServlet {
     @Override
@@ -24,8 +25,12 @@ public class AuthServlet extends HttpServlet {
             sc.setAttribute("user", sessionUser);
             resp.sendRedirect(req.getContextPath());
         } else {
-            req.setAttribute("error", "Не верный email или пароль");
-            req.getRequestDispatcher("login.jsp").forward(req, resp);
+            resp.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = resp.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Не верный email или пароль');");
+            out.println("location='login.jsp';");
+            out.println("</script>");
         }
     }
 }

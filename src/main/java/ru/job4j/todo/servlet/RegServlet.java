@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class RegServlet extends HttpServlet {
     @Override
@@ -32,8 +33,12 @@ public class RegServlet extends HttpServlet {
             sc.setAttribute("user", sessionUser);
             resp.sendRedirect(req.getContextPath());
         } else {
-            req.setAttribute("error", "Пользователь с таким email уже существует!");
-            req.getRequestDispatcher("reg.jsp").forward(req, resp);
+            resp.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = resp.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Пользователь с таким email уже существует');");
+            out.println("location='reg.jsp';");
+            out.println("</script>");
         }
     }
 }
