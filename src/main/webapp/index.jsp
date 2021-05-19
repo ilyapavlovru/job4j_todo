@@ -40,9 +40,11 @@
 <script>
 
     let allLoadedItems;
+    let allLoadedCategories;
 
     $(document).ready(function () {
         loadItemsFromDB();
+        loadCategoriesFromDB();
     });
 
     function loadItemsFromDB() {
@@ -56,11 +58,33 @@
         })
     }
 
+    function loadCategoriesFromDB() {
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/todo/categories.do',
+            dataType: 'json'
+        }).done(function (data) {
+            console.log(data);
+            allLoadedCategories = data;
+            fillCategoriesSelector();
+        })
+    }
+
     function validate() {
         const description = $('#description').val();
         if (description === "") {
             alert("Укажите описание задания");
             return false;
+        }
+    }
+    
+    function fillCategoriesSelector() {
+        const select = document.getElementById('cIds');
+        for (let x = 0; x < allLoadedCategories.length; x++) {
+            const opt = document.createElement('option');
+            opt.value = allLoadedCategories[x].id;
+            opt.innerHTML = allLoadedCategories[x].name;
+            select.appendChild(opt);
         }
     }
 
@@ -150,11 +174,7 @@
                     <div class="form-group row">
                         <label class="col-form-label col-sm-3" for="cIds" style="font-weight: 900">Выбор категорий</label>
                         <div class="col-sm-5">
-                            <select class="form-control" name="cIds" id="cIds" multiple>
-                                <c:forEach items="${allCities}" var="city">
-                                    <option value=<c:out value="${city.id}"/>><c:out value="${city.name}"/></option>
-                                </c:forEach>
-                            </select>
+                            <select class="form-control" name="cIds" id="cIds" multiple></select>
                         </div>
                     </div>
                     <input type="hidden" name="action" value="add"/>

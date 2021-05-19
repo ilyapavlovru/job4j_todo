@@ -7,6 +7,7 @@ import org.hibernate.query.Query;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.Role;
 import ru.job4j.todo.model.User;
@@ -39,6 +40,13 @@ public class HbmTodoStore implements Store, AutoCloseable {
     public Collection<Item> findAllItems() {
         return tx(
                 session -> session.createQuery("from ru.job4j.todo.model.Item").list()
+        );
+    }
+
+    @Override
+    public Collection<Category> findAllCategories() {
+        return tx(
+                session -> session.createQuery("from ru.job4j.todo.model.Category").list()
         );
     }
 
