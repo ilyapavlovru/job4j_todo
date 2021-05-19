@@ -51,9 +51,13 @@ public class HbmTodoStore implements Store, AutoCloseable {
     }
 
     @Override
-    public Item addItem(Item item) {
+    public Item addItem(Item item, String[] ids) {
         return tx(
                 session -> {
+                    for (String id : ids) {
+                        Category category = session.find(Category.class, Integer.parseInt(id));
+                        item.addCategory(category);
+                    }
                     session.save(item);
                     return item;
                 }

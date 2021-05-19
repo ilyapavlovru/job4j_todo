@@ -10,7 +10,7 @@ import java.util.Collection;
 public interface Store {
     Collection<Item> findAllItems();
     Collection<Category> findAllCategories();
-    Item addItem(Item item);
+    Item addItem(Item item, String[] ids);
     Item findItemById(int id);
     boolean replaceItem(Item item);
     User findUserByEmail(String email);

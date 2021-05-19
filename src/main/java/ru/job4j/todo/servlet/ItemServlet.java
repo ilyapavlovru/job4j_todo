@@ -32,11 +32,12 @@ public class ItemServlet extends HttpServlet {
         Store store = new HbmTodoStore();
         if ("add".equals(req.getParameter("action"))) {
             String description = req.getParameter("description");
+            String[] cIds = req.getParameterValues("cIds");
             HttpSession session = req.getSession();
             User sessionUser = (User) session.getAttribute("user");
             User user = store.findUserByEmail(sessionUser.getEmail());
             Item item = new Item(description, new Timestamp(System.currentTimeMillis()), false, user.getName());
-            store.addItem(item);
+            store.addItem(item, cIds);
             resp.sendRedirect(req.getContextPath());
         } else {
             int itemId = Integer.parseInt(req.getParameter("itemId"));
