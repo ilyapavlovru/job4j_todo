@@ -2,6 +2,8 @@ package ru.job4j.todo.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,6 +21,13 @@ public class Item {
 
     @Column(name = "user_name")
     private String userName;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private List<Category> categories = new ArrayList<>();
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+    }
 
     public Item() {
     }

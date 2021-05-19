@@ -133,17 +133,54 @@
     }
 </script>
 
-<div class="container">
-    <h2>Добавить новое задание</h2>
-    <form action="<%=request.getContextPath()%>/items.do" method="post">
-        <div class="form-group">
-            <label for="description">Описание:</label>
-            <input type="text" class="form-control" id="description" placeholder="Введите описание" name="description">
+<div class="container pt-1">
+    <div class="row">
+        <div class="card" style="width: 100%">
+            <div class="card-header" style="font-weight: bold; font-size: larger">
+                Форма для создания задания
+            </div>
+            <div class="card-body">
+                <form action="<%=request.getContextPath()%>/items.do" method="post">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3" for="description" style="font-weight: 900">Описание</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="description" placeholder="Введите описание" name="description">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3" for="cIds" style="font-weight: 900">Выбор категорий</label>
+                        <div class="col-sm-5">
+                            <select class="form-control" name="cIds" id="cIds" multiple>
+                                <c:forEach items="${allCities}" var="city">
+                                    <option value=<c:out value="${city.id}"/>><c:out value="${city.name}"/></option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" name="action" value="add"/>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3" style="font-weight: 900"></label>
+                        <div class="col-sm-5">
+                            <button type="submit" class="btn btn-success" onclick="return validate()">Добавить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        <input type="hidden" name="action" value="add"/>
-        <button type="submit" class="btn btn-success" onclick="return validate()">Добавить</button>
-    </form>
+    </div>
 </div>
+
+<%--<div class="container">--%>
+<%--    <h2>Добавить новое задание</h2>--%>
+<%--    <form action="<%=request.getContextPath()%>/items.do" method="post">--%>
+<%--        <div class="form-group">--%>
+<%--            <label for="description1">Описание:</label>--%>
+<%--            <input type="text" class="form-control" id="description1" placeholder="Введите описание" name="description">--%>
+<%--        </div>--%>
+<%--        <input type="hidden" name="action" value="add"/>--%>
+<%--        <button type="submit" class="btn btn-success" onclick="return validate()">Добавить</button>--%>
+<%--    </form>--%>
+<%--</div>--%>
 
 <div class="container">
     <h2>Список заданий</h2>

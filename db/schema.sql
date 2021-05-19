@@ -21,3 +21,9 @@ create table j_user
     password varchar(50),
     role_id  int not null references j_role (id)
 );
+
+create table category
+(
+    id   serial primary key,
+    name varchar(50)
+);
