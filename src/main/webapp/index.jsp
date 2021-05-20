@@ -64,7 +64,6 @@
             url: 'http://localhost:8080/todo/categories.do',
             dataType: 'json'
         }).done(function (data) {
-            console.log(data);
             allLoadedCategories = data;
             fillCategoriesSelector();
         })
@@ -74,6 +73,11 @@
         const description = $('#description').val();
         if (description === "") {
             alert("Укажите описание задания");
+            return false;
+        }
+        const cIds = $('#cIds option:selected').text();
+        if (cIds === "") {
+            alert("Укажите категорию задания");
             return false;
         }
     }
@@ -90,10 +94,15 @@
 
     function addAllItemsToTable() {
         for (let x = 0; x < allLoadedItems.length; x++) {
-            var checkBoxValue = allLoadedItems[x].done ? ' checked="checked"' : '';
+            let itemCategories = '';
+            for (let y = 0; y < allLoadedItems[x].categories.length; y++) {
+                itemCategories += '#' + allLoadedItems[x].categories[y].name + ' ';
+            }
+            const checkBoxValue = allLoadedItems[x].done ? ' checked="checked"' : '';
             $('#table tr:last').after(
                 '<tr>' +
                 '<td>' + allLoadedItems[x].description + '</td>' +
+                '<td>' + itemCategories + '</td>' +
                 '<td>' + allLoadedItems[x].userName + '</td>' +
                 '<td><div class="custom-control custom-checkbox">' +
                 '<input type="checkbox"' + checkBoxValue + ' class="custom-control-input" id="customCheck' +
@@ -106,10 +115,15 @@
 
     function addNotDoneItemsToTable() {
         for (let x = 0; x < allLoadedItems.length; x++) {
+            let itemCategories = '';
+            for (let y = 0; y < allLoadedItems[x].categories.length; y++) {
+                itemCategories += '#' + allLoadedItems[x].categories[y].name + ' ';
+            }
             if (allLoadedItems[x].done === false) {
                 $('#table tr:last').after(
                     '<tr>' +
                     '<td>' + allLoadedItems[x].description + '</td>' +
+                    '<td>' + itemCategories + '</td>' +
                     '<td>' + allLoadedItems[x].userName + '</td>' +
                     '<td><div class="custom-control custom-checkbox">' +
                     '<input type="checkbox" class="custom-control-input" id="customCheck' + allLoadedItems[x].id + '"' +
@@ -190,18 +204,6 @@
     </div>
 </div>
 
-<%--<div class="container">--%>
-<%--    <h2>Добавить новое задание</h2>--%>
-<%--    <form action="<%=request.getContextPath()%>/items.do" method="post">--%>
-<%--        <div class="form-group">--%>
-<%--            <label for="description1">Описание:</label>--%>
-<%--            <input type="text" class="form-control" id="description1" placeholder="Введите описание" name="description">--%>
-<%--        </div>--%>
-<%--        <input type="hidden" name="action" value="add"/>--%>
-<%--        <button type="submit" class="btn btn-success" onclick="return validate()">Добавить</button>--%>
-<%--    </form>--%>
-<%--</div>--%>
-
 <div class="container">
     <h2>Список заданий</h2>
     <div class="form-check">
@@ -214,6 +216,7 @@
                 <thead>
                 <tr>
                     <th scope="col">Описание</th>
+                    <th scope="col">Категории</th>
                     <th scope="col">Автор</th>
                     <th scope="col">Выполнено</th>
                 </tr>
