@@ -23,7 +23,7 @@ public class Item {
     @Column(name = "user_name")
     private String userName;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Category> categories = new ArrayList<>();
 
     public void addCategory(Category category) {
